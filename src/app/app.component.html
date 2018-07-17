@@ -1,0 +1,88 @@
+<ngb-tabset>
+  <ngb-tab>
+      <ng-template ngbTabTitle>
+        <b>Ruta 1</b>
+        <fa name="star"></fa>
+        <fa name="star"></fa>
+        <fa name="star"></fa>        
+      </ng-template>
+      
+    <ng-template ngbTabContent>
+
+        <table class="table table-striped table-sm table-dark">
+            <thead>
+                <tr>                  
+                    <th></th><th class="columnSeparator">Semáforo 1</th>
+                    <th></th><th></th><th></th><th class="columnSeparator">Semáforo 2</th>
+                    <th></th><th></th><th></th><th class="columnSeparator">Semáforo 3</th>
+                    <th></th><th></th><th></th><th class="columnSeparator"></th>
+                  </tr>              
+              <tr>
+                  <th scope="col">#</th>
+  
+                  <th scope="col" class="columnSeparator">Rnd/Detenido</th> 
+                  <th scope="col">Rnd/Cerca</th>
+                  <th scope="col">Rnd/Limpia</th>
+                  <th scope="col">Rnd/Daño</th>
+ 
+
+                  <th scope="col" class="columnSeparator">Rnd/Detenido</th>
+                  <th scope="col">Rnd/Cerca</th>
+                  <th scope="col">Rnd/Limpia</th>
+                  <th scope="col">Rnd/Daño</th>
+
+
+                  <th scope="col" class="columnSeparator">Rnd/Detenido</th>
+                  <th scope="col">Rnd/Cerca</th>
+                  <th scope="col">Rnd/Limpia</th>
+                  <th scope="col">Rnd/Daño</th>
+
+
+                  <th scope="col" class="columnSeparator">Costo</th>
+
+
+                </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let sim of simulaciones" [class.bg-success]="sim[0].costo > 0 || sim[1].costo > 0 || sim[2].costo > 0">
+                <th scope="row">{{sim[0].num}}</th>
+
+                <td [class.bg-danger]="!sim[0].detenido" class="columnSeparator">[{{sim[0].rnd_detenido}}] - {{sim[0].detenido | setBooleans}}</td>      
+                <td [class.bg-danger]="!sim[0].cerca_limpiador">[{{sim[0].rnd_cerca_limpiador | setNoValue}}] - {{sim[0].cerca_limpiador | setBooleans}}</td>               
+                <td [class.bg-danger]="!sim[0].limpia">[{{sim[0].rnd_limpia | setNoValue}}] - {{sim[0].limpia | setBooleans}}</td>                
+                <td [class.bg-danger]="!sim[0].rompe">[{{sim[0].rnd_rompe | setNoValue}}] - {{sim[0].rompe | setBooleans}}</td>
+
+                <td [class.bg-danger]="!sim[1].detenido" class="columnSeparator">[{{sim[1].rnd_detenido}}] - {{sim[1].detenido | setBooleans}}</td>      
+                <td [class.bg-danger]="!sim[1].cerca_limpiador">[{{sim[1].rnd_cerca_limpiador | setNoValue}}] - {{sim[1].cerca_limpiador | setBooleans}}</td>               
+                <td [class.bg-danger]="!sim[1].limpia">[{{sim[1].rnd_limpia | setNoValue}}] - {{sim[1].limpia | setBooleans}}</td>                
+                <td [class.bg-danger]="!sim[1].rompe">[{{sim[1].rnd_rompe | setNoValue}}] - {{sim[1].rompe | setBooleans}}</td>
+
+                <td [class.bg-danger]="!sim[2].detenido" class="columnSeparator">[{{sim[2].rnd_detenido}}] - {{sim[2].detenido | setBooleans}}</td>      
+                <td [class.bg-danger]="!sim[2].cerca_limpiador">[{{sim[2].rnd_cerca_limpiador | setNoValue}}] - {{sim[2].cerca_limpiador | setBooleans}}</td>               
+                <td [class.bg-danger]="!sim[2].limpia">[{{sim[2].rnd_limpia | setNoValue}}] - {{sim[2].limpia | setBooleans}}</td>                
+                <td [class.bg-danger]="!sim[2].rompe">[{{sim[2].rnd_rompe | setNoValue}}] - {{sim[2].rompe | setBooleans}}</td>
+
+                <td class="columnSeparator">{{sim[0].costo + sim[1].costo + sim[2].costo}}</td>
+
+              </tr>
+              
+            </tbody>
+          </table>
+        
+      
+    </ng-template>
+  </ngb-tab>
+
+  <ngb-tab>
+      <ng-template ngbTabTitle>
+          <b>Ruta 2</b>
+          <fa name="star"></fa>
+          <fa name="star"></fa>      
+        </ng-template>
+    <ng-template ngbTabContent>
+      
+    </ng-template>
+  </ngb-tab>  
+</ngb-tabset>
+
+<h1>Costo de Ruta 1: {{costo_acumulado}}</h1>
