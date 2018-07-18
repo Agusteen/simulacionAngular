@@ -16,15 +16,13 @@
     padding: 100px;
 }
 
-.bkInfoRes {
-    height: 40vh;
-    background-color: rgb(213, 252, 222);
-    border-radius: 4px;
-    margin-top: 3px; 
+.bkInfoRes {  
+    margin-top: 8px; 
+    padding-top: 8px;
 }
 
 .footer {
-    color: rgba(0, 0, 0, 0.26);
+    color: rgba(0, 0, 0, 0.507);
     margin-top: 5%;
 }
 
@@ -66,4 +64,9 @@ table {
     th {
         text-align: center; 
     }
+ }
+
+ .msg {
+     margin: 0 !important;
+     color: #f36976;
  }

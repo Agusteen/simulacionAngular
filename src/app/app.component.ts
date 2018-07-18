@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Recorrido } from './recorrido.model';
-import { ruta1_rojo, ruta2_azul } from './rangos-rutas';
+import { ruta1_rojo, ruta2_azul, costo_dano, costo_limpiado } from './rangos-rutas';
 
 @Component({
   selector: 'app-root',
@@ -19,16 +19,19 @@ export class AppComponent {
 
   costo_acumulado: number = 0;
 
-  costo_acumuladoR1p: number = 0;
-  costo_acumuladoR2p: number = 0;
+  costo_acumuladoR1p: number;
+  costo_acumuladoR2p: number;
 
-  costo_acumuladoR1np: number = 0;
-  costo_acumuladoR2np: number = 0;
+  costo_acumuladoR1np: number;
+  costo_acumuladoR2np: number;
 
   simulacionesR1: Array<any>;
   simulacionesR2: Array<any>;
 
-  msg: string = 'Para cantidades mayor a 10 mil la performance degrada';
+  costo_rompe = costo_dano;
+  costo_limpia = costo_limpiado;
+
+  msg: string = '';
   cancelar: boolean = false;
 
   constructor() {
@@ -36,14 +39,16 @@ export class AppComponent {
   }
 
   prepararSim() {
-    if (this.cant_simulaciones > 0 && this.cant_simulaciones < 10000) {
+    if (this.cant_simulaciones > 0 && this.cant_simulaciones < 5000) {
       this.simulacionesR1 = new Array();
       this.simulacionesR2 = new Array();
       this.loading = true;
       this.start();
       this.showTable = true;
+    } else if(this.cant_simulaciones > 5000) {
+      this.msg = 'Para cantidades mayor a 5 mil la performance degrada';
     } else {
-      this.msg = 'Debe ser un numero mayor a 0'
+      this.msg = 'Debe ser un numero mayor a 0';
     }
 
   }
@@ -133,10 +138,10 @@ export class AppComponent {
       simulacionRuta.detenido = true;
       let rnd_cerca_limpiador = this.getRandomNumber();
 
-      simulacionRuta.rnd_cerca_limpiador = rnd_cerca_limpiador;
-      simulacionRuta.cerca_limpiador = true;
+      simulacionRuta.rnd_cerca_limpiador = rnd_cerca_limpiador;      
 
       if (rnd_cerca_limpiador < ruta.lim_cerca) {
+        simulacionRuta.cerca_limpiador = true;
         let rnd_limpia = this.getRandomNumber();
 
         simulacionRuta.rnd_limpia = rnd_limpia;
@@ -144,8 +149,8 @@ export class AppComponent {
         if (rnd_limpia < ruta.lim_limpia) {
           simulacionRuta.limpia = true;
           if (this.paga) {
-            simulacionRuta.costo = 0.5;
-            this.costo_acumulado += 0.5;
+            simulacionRuta.costo = this.costo_limpia;
+            this.costo_acumulado += this.costo_limpia;
           } else {
             let rnd_rompe = this.getRandomNumber();
 
@@ -153,8 +158,8 @@ export class AppComponent {
 
             if (rnd_rompe < ruta.lim_daño) {
               simulacionRuta.rompe = true;
-              simulacionRuta.costo = 500;
-              this.costo_acumulado += 500;
+              simulacionRuta.costo = this.costo_rompe;
+              this.costo_acumulado += this.costo_rompe;
             }
           }
         }
@@ -165,6 +170,8 @@ export class AppComponent {
   }
 
   repetir() {
+    this.simulacionesR1 = new Array();
+    this.simulacionesR2 = new Array();
     this.flagSimuladoCompleto = true;
     this.paga = !this.paga;
     this.loading = true;
@@ -181,6 +188,7 @@ export class AppComponent {
     this.costo_acumuladoR2np = 0;
     this.showTable = false;
     this.flagSimuladoCompleto = false;
+    this.msg = '';
   }
 
   cancel() {

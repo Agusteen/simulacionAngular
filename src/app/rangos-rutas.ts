@@ -33,3 +33,6 @@ export const ruta2_azul = [
         lim_daño: 5
     }
 ]
+
+export const costo_dano = 500;
+export const costo_limpiado = 0.5;

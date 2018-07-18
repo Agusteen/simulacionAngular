@@ -3,11 +3,12 @@
     <div class="col">
       <div class="input-group">
         <div class="input-group-prepend">
-          <span class="input-group-text">Cantidad de simulaciones</span>
+          <span class="input-group-text">Cantidad de experimentos</span>
         </div>
         <input type="number" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" [(ngModel)]="cant_simulaciones"
-           [disabled]="flagSimulado" #cant="ngModel" name="cant" required>
+          [disabled]="flagSimulado" #cant="ngModel" name="cant" required>
       </div>
+      <h6 class="msg" *ngIf="!flagSimulado"><small>{{msg}}</small></h6>
     </div>
     <div class="col">
       <div class="input-group">
@@ -15,8 +16,8 @@
           <label class="input-group-text">Política</label>
         </div>
         <select class="custom-select" [(ngModel)]="paga" [ngModelOptions]="{standalone: true}" [disabled]="flagSimulado">
-          <option [value]="true">Pagar $0.5 al limpiavidrios</option>
-          <option [value]="false">No pagar al limpiavidrios</option>
+          <option [value]="true">Pagar ${{costo_limpia}} al limpiavidrios</option>
+          <option [value]="false">No pagar al limpiavidrios (daño ${{costo_rompe}})</option>
         </select>
       </div>
     </div>
@@ -44,58 +45,58 @@
     </ng-template>
 
     <ng-template ngbTabContent>
-        <table class="table table-striped table-sm table-dark headerTable">
+      <table class="table table-striped table-sm table-dark headerTable">
 
-            <thead>
-              <tr>
-                <th></th>
-                <th class="columnSeparator">Semáforo 1</th>
-                <th></th>
-                <th></th>
-                <th *ngIf="!paga"></th>
-                <th class="columnSeparator">Semáforo 2</th>
-                <th></th>
-                <th></th>
-                <th *ngIf="!paga"></th>
-                <th class="columnSeparator">Semáforo 3</th>
-                <th></th>
-                <th></th>
-                <th *ngIf="!paga"></th>
-                <th class="columnSeparator"></th>
-              </tr>
-              <tr>
-                <th scope="col">Num</th>
-  
-                <th scope="col" class="columnSeparator">Rnd/Detenido</th>
-                <th scope="col">Rnd/Cerca</th>
-                <th scope="col">Rnd/Limpia</th>
-                <th scope="col" *ngIf="!paga">Rnd/Daño</th>
-  
-  
-                <th scope="col" class="columnSeparator">Rnd/Detenido</th>
-                <th scope="col">Rnd/Cerca</th>
-                <th scope="col">Rnd/Limpia</th>
-                <th scope="col" *ngIf="!paga">Rnd/Daño</th>
-  
-  
-                <th scope="col" class="columnSeparator">Rnd/Detenido</th>
-                <th scope="col">Rnd/Cerca</th>
-                <th scope="col">Rnd/Limpia</th>
-                <th scope="col" *ngIf="!paga">Rnd/Daño</th>
-  
-  
-                <th scope="col" class="columnSeparator">Costo</th>
-  
-  
-              </tr>
-            </thead>
-        </table>
-      
+        <thead>
+          <tr>
+            <th></th>
+            <th class="columnSeparator">Semáforo R1</th>
+            <th></th>
+            <th></th>
+            <th *ngIf="!paga"></th>
+            <th class="columnSeparator">Semáforo R2</th>
+            <th></th>
+            <th></th>
+            <th *ngIf="!paga"></th>
+            <th class="columnSeparator">Semáforo R3</th>
+            <th></th>
+            <th></th>
+            <th *ngIf="!paga"></th>
+            <th class="columnSeparator"></th>
+          </tr>
+          <tr>
+            <th scope="col">Num</th>
+
+            <th scope="col" class="columnSeparator">Rnd/Detenido</th>
+            <th scope="col">Rnd/Cerca</th>
+            <th scope="col">Rnd/Limpia</th>
+            <th scope="col" *ngIf="!paga">Rnd/Daño</th>
+
+
+            <th scope="col" class="columnSeparator">Rnd/Detenido</th>
+            <th scope="col">Rnd/Cerca</th>
+            <th scope="col">Rnd/Limpia</th>
+            <th scope="col" *ngIf="!paga">Rnd/Daño</th>
+
+
+            <th scope="col" class="columnSeparator">Rnd/Detenido</th>
+            <th scope="col">Rnd/Cerca</th>
+            <th scope="col">Rnd/Limpia</th>
+            <th scope="col" *ngIf="!paga">Rnd/Daño</th>
+
+
+            <th scope="col" class="columnSeparator">Costo</th>
+
+
+          </tr>
+        </thead>
+      </table>
+
       <div class="htable">
 
         <table class="table table-striped table-sm table-dark">
 
-          
+
           <tbody>
             <tr *ngFor="let sim of simulacionesR1" [class.bg-success]="sim[0].costo > 0 || sim[1].costo > 0 || sim[2].costo > 0">
               <th scope="row">{{sim[0].num}}</th>
@@ -133,41 +134,41 @@
       <fa class="colorBlue" name="star"></fa>
     </ng-template>
     <ng-template ngbTabContent>
-        <table class="table table-striped table-sm table-dark headerTable2">
-            <thead>
-              <tr>
-                <th></th>
-                <th class="columnSeparator">Semáforo 1</th>
-                <th></th>
-                <th></th>
-                <th *ngIf="!paga"></th>
-                <th class="columnSeparator">Semáforo 2</th>
-                <th></th>
-                <th></th>
-                <th *ngIf="!paga"></th>
-  
-                <th class="columnSeparator"></th>
-              </tr>
-              <tr>
-                <th scope="col">Num</th>
-  
-                <th scope="col" class="columnSeparator">Rnd/Detenido</th>
-                <th scope="col">Rnd/Cerca</th>
-                <th scope="col">Rnd/Limpia</th>
-                <th scope="col" *ngIf="!paga">Rnd/Daño</th>
-  
-                <th scope="col" class="columnSeparator">Rnd/Detenido</th>
-                <th scope="col">Rnd/Cerca</th>
-                <th scope="col">Rnd/Limpia</th>
-                <th scope="col" *ngIf="!paga">Rnd/Daño</th>
-  
-                <th scope="col" class="columnSeparator">Costo</th>
-  
-              </tr>
-            </thead>
-        </table>
+      <table class="table table-striped table-sm table-dark headerTable2">
+        <thead>
+          <tr>
+            <th></th>
+            <th class="columnSeparator">Semáforo P1</th>
+            <th></th>
+            <th></th>
+            <th *ngIf="!paga"></th>
+            <th class="columnSeparator">Semáforo P2</th>
+            <th></th>
+            <th></th>
+            <th *ngIf="!paga"></th>
+
+            <th class="columnSeparator"></th>
+          </tr>
+          <tr>
+            <th scope="col">Num</th>
+
+            <th scope="col" class="columnSeparator">Rnd/Detenido</th>
+            <th scope="col">Rnd/Cerca</th>
+            <th scope="col">Rnd/Limpia</th>
+            <th scope="col" *ngIf="!paga">Rnd/Daño</th>
+
+            <th scope="col" class="columnSeparator">Rnd/Detenido</th>
+            <th scope="col">Rnd/Cerca</th>
+            <th scope="col">Rnd/Limpia</th>
+            <th scope="col" *ngIf="!paga">Rnd/Daño</th>
+
+            <th scope="col" class="columnSeparator">Costo</th>
+
+          </tr>
+        </thead>
+      </table>
       <div class="htable">
-          <table class="table table-striped table-sm table-dark">
+        <table class="table table-striped table-sm table-dark">
 
           <tbody>
             <tr *ngFor="let sim of simulacionesR2" [class.bg-success]="sim[0].costo > 0 || sim[1].costo > 0">
@@ -199,17 +200,68 @@
 
 <div *ngIf="showTable" class="container text-center bkInfoRes">
 
-      <button type="button" class="btn btn-success mb-2" *ngIf="!flagSimuladoCompleto" (click)="repetir()">Simular con cambio de política</button>
+  <button type="button" class="btn btn-success mb-2" *ngIf="!flagSimuladoCompleto" (click)="repetir()">Simular con cambio de política</button>
+
+  <div class="row">
+    <div class="col-sm">
+      <h1>Resultados</h1>
+    </div>
+
+  </div>
+  <div class="row">
+    <div class="col-sm" *ngIf="costo_acumuladoR1p">
+      <hr>
+      <h3>Pagando al lmpiavidrios
+        <small>${{costo_limpia}}</small>
+      </h3>
+      <br>
+      <h5>
+        <fa class="colorRed" name="star"></fa>
+        <fa class="colorRed" name="star"></fa>
+        <fa class="colorRed" name="star"></fa>
+        Costo en {{cant_simulaciones}} experimentos:
+        <strong>${{costo_acumuladoR1p}}</strong>
+        <h6>Promedio: ${{costo_acumuladoR1p / cant_simulaciones | number : '1.2-2'}}</h6>
+      </h5>
+      <h5>
+        <fa class="colorBlue" name="star"></fa>
+        <fa class="colorBlue" name="star"></fa>
+        Costo en {{cant_simulaciones}} experimentos:
+        <strong>${{costo_acumuladoR2p}}</strong>
+        <h6>Promedio: ${{costo_acumuladoR2p / cant_simulaciones | number : '1.2-2'}}</h6>
+      </h5>
+    </div>
+    <div class="col-sm" *ngIf="costo_acumuladoR1np">
+      <hr>
+      <h3>No pagando
+        <small>(${{costo_rompe}} el daño)</small>
+      </h3>
+      <br>
+      <h5>
+        <fa class="colorRed" name="star"></fa>
+        <fa class="colorRed" name="star"></fa>
+        <fa class="colorRed" name="star"></fa>
+        Costo en {{cant_simulaciones}} experimentos:
+        <strong>${{costo_acumuladoR1np}}</strong>
+        <h6>Promedio: ${{costo_acumuladoR1np / cant_simulaciones | number : '1.2-2'}}</h6>
+      </h5>
+      <h5>
+        <fa class="colorBlue" name="star"></fa>
+        <fa class="colorBlue" name="star"></fa>
+        Costo en {{cant_simulaciones}} experimentos:
+        <strong>${{costo_acumuladoR2np}}</strong>
+        <h6>Promedio: ${{costo_acumuladoR2np / cant_simulaciones | number : '1.2-2'}}</h6>
+      </h5>
+    </div>
 
 
-  <h4>Costo de Ruta 1 pagando: {{costo_acumuladoR1p}}</h4>
-  <h4>Costo de Ruta 2 pagando: {{costo_acumuladoR2p}}</h4>
-  <h4>Costo de Ruta 1 no pagando: {{costo_acumuladoR1np}}</h4>
-  <h4>Costo de Ruta 2 no pagando: {{costo_acumuladoR2np}}</h4>
+
+  </div>
 </div>
 
-<div *ngIf="!showTable" class="container text-center bkInfo">
-  <h1 class="display-4">Información</h1>
+<div *ngIf="!flagSimulado" class="container text-center bkInfo">
+  <h1 class="display-4">Ej. 338 Limpiavidrios</h1>
+  <a href="../assets/docs/Ejercicio338.pdf" target="_blank">Ver enunciado Ejercico 338</a>
 </div>
 
 <div class="text-center footer">Agustín Muñoz Campos - Simulación UTN FRC 2018</div>
