@@ -8,28 +8,71 @@ import { ruta1_rojo, ruta2_azul } from './rangos-rutas';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  cant_simulaciones: Number = 100;
+  cant_simulaciones: number = 50;
   paga: Boolean = false;
+  showTable: Boolean = false;
 
-  costo_acumulado: number = 0;
+  barValue: number = 0;
+  loading: Boolean = false;
 
-  simulaciones = new Array();
+  costo_acumuladoR1: number = 0;
+  costo_acumuladoR2: number = 0;
+
+  simulacionesR1: Array<any>;
+  simulacionesR2: Array<any>;
 
   constructor() {
-    this.start();
+
   }
 
-  start() {
+  prepararSim(){
+    this.simulacionesR1 = new Array();
+    this.simulacionesR2 = new Array();
+    this.loading = true;
+    this.start();
+    this.showTable = true;
+    
+  }
+
+  async start() {
+    let update = Math.round(this.cant_simulaciones / 10);
+
+    
     for (let i = 1; i <= this.cant_simulaciones; i++) {
       let ruta: Recorrido[] = [];
-
       ruta1_rojo.forEach((value, index) => {
         ruta.push(this.simular(i, value, index));
-      })
-
-      this.simulaciones.push(ruta)
-
+      });
+      if(i % update == 0){                
+        this.barValue = (i/this.cant_simulaciones)/2;
+        await this.wait(0.01);
+      }      
+      this.simulacionesR1.push(ruta);  
     }
+
+    for (let i = 1; i <= this.cant_simulaciones; i++) {
+      let ruta: Recorrido[] = [];
+      ruta2_azul.forEach((value, index) => {
+        ruta.push(this.simular(i, value, index));
+      });
+      if(i % update == 0){                
+        this.barValue = 0.5 + (i/this.cant_simulaciones)/2;
+        await this.wait(0.01);
+      }      
+      this.simulacionesR2.push(ruta);  
+    }
+
+
+
+
+
+    this.loading = false;
+  }
+
+  wait(ms: number)  {
+    return new Promise((resolve)=> {
+      setTimeout(resolve, ms);
+    });
   }
 
   getRandomNumber() {
@@ -62,7 +105,7 @@ export class AppComponent {
           simulacionRuta.limpia = true;
           if (this.paga) {
             simulacionRuta.costo = 0.5;
-            this.costo_acumulado += 0.5;
+            this.costo_acumuladoR1 += 0.5;            
           } else {
             let rnd_rompe = this.getRandomNumber();
 
@@ -71,7 +114,7 @@ export class AppComponent {
             if (rnd_rompe < ruta.lim_daño) {
               simulacionRuta.rompe = true;
               simulacionRuta.costo = 500;
-              this.costo_acumulado += 500;
+              this.costo_acumuladoR1 += 500;
             }
           }
         }
