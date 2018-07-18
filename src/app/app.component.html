@@ -5,7 +5,8 @@
         <div class="input-group-prepend">
           <span class="input-group-text">Cantidad de simulaciones</span>
         </div>
-        <input type="number" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" [(ngModel)]="cant_simulaciones" [ngModelOptions]="{standalone: true}" required>
+        <input type="number" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" [(ngModel)]="cant_simulaciones"
+           [disabled]="flagSimulado" #cant="ngModel" name="cant" required>
       </div>
     </div>
     <div class="col">
@@ -13,25 +14,25 @@
         <div class="input-group-prepend">
           <label class="input-group-text">Política</label>
         </div>
-        <select class="custom-select" [(ngModel)]="paga" [ngModelOptions]="{standalone: true}" required>
+        <select class="custom-select" [(ngModel)]="paga" [ngModelOptions]="{standalone: true}" [disabled]="flagSimulado">
           <option [value]="true">Pagar $0.5 al limpiavidrios</option>
           <option [value]="false">No pagar al limpiavidrios</option>
         </select>
       </div>
     </div>
     <div class="col-auto">
-      <button type="submit" class="btn btn-success mb-2" [disabled]="!simForm.form.valid || loading">Empezar simulación</button>      
+      <button type="submit" class="btn btn-success mb-2" [disabled]="simForm.invalid" *ngIf="!flagSimulado && !loading">Empezar simulación</button>
+      <button type="button" class="btn btn-danger mb-2" *ngIf="flagSimulado" (click)="reset()">Nueva simulación</button>
+      <button type="button" class="btn btn-danger mb-2" *ngIf="loading" (click)="cancel()">Cancelar</button>
     </div>
     <div class="col-auto" [hidden]="!loading">
-        <h2 class="row"><spinner [size]="40" [tickness]="1"></spinner>&nbsp;{{barValue | percent}} </h2>        
+      <h2 class="row">
+        <spinner [size]="40" [tickness]="1"></spinner>&nbsp;{{barValue | percent}} </h2>
     </div>
   </div>
 </form>
 
-
-
 <hr>
-
 
 <ngb-tabset [hidden]="!showTable" [justify]="'center'">
   <ngb-tab>
@@ -43,90 +44,8 @@
     </ng-template>
 
     <ng-template ngbTabContent>
+        <table class="table table-striped table-sm table-dark headerTable">
 
-      <table class="table table-striped table-sm table-dark" >
-        <thead>
-          <tr>
-            <th></th>
-            <th class="columnSeparator">Semáforo 1</th>
-            <th></th>
-            <th></th>
-            <th *ngIf="!paga"></th>
-            <th class="columnSeparator">Semáforo 2</th>
-            <th></th>
-            <th></th>
-            <th *ngIf="!paga"></th>
-            <th class="columnSeparator">Semáforo 3</th>
-            <th></th>
-            <th></th>
-            <th *ngIf="!paga"></th>
-            <th class="columnSeparator"></th>
-          </tr>
-          <tr>
-            <th scope="col">#</th>
-
-            <th scope="col" class="columnSeparator">Rnd/Detenido</th>
-            <th scope="col">Rnd/Cerca</th>
-            <th scope="col">Rnd/Limpia</th>
-            <th scope="col" *ngIf="!paga">Rnd/Daño</th>
-
-
-            <th scope="col" class="columnSeparator">Rnd/Detenido</th>
-            <th scope="col">Rnd/Cerca</th>
-            <th scope="col">Rnd/Limpia</th>
-            <th scope="col" *ngIf="!paga">Rnd/Daño</th>
-
-
-            <th scope="col" class="columnSeparator">Rnd/Detenido</th>
-            <th scope="col">Rnd/Cerca</th>
-            <th scope="col">Rnd/Limpia</th>
-            <th scope="col" *ngIf="!paga">Rnd/Daño</th>
-
-
-            <th scope="col" class="columnSeparator">Costo</th>
-
-
-          </tr>
-        </thead>
-        <tbody >
-          <tr *ngFor="let sim of simulacionesR1" [class.bg-success]="sim[0].costo > 0 || sim[1].costo > 0 || sim[2].costo > 0">
-            <th scope="row">{{sim[0].num}}</th>
-
-            <td [class.bg-danger]="!sim[0].detenido" class="columnSeparator">[{{sim[0].rnd_detenido}}] - {{sim[0].detenido | setBooleans}}</td>
-            <td [class.bg-danger]="!sim[0].cerca_limpiador">[{{sim[0].rnd_cerca_limpiador | setNoValue}}] - {{sim[0].cerca_limpiador | setBooleans}}</td>
-            <td [class.bg-danger]="!sim[0].limpia">[{{sim[0].rnd_limpia | setNoValue}}] - {{sim[0].limpia | setBooleans}}</td>
-            <td [class.bg-danger]="!sim[0].rompe"  *ngIf="!paga">[{{sim[0].rnd_rompe | setNoValue}}] - {{sim[0].rompe | setBooleans}}</td>
-
-            <td [class.bg-danger]="!sim[1].detenido" class="columnSeparator">[{{sim[1].rnd_detenido}}] - {{sim[1].detenido | setBooleans}}</td>
-            <td [class.bg-danger]="!sim[1].cerca_limpiador">[{{sim[1].rnd_cerca_limpiador | setNoValue}}] - {{sim[1].cerca_limpiador | setBooleans}}</td>
-            <td [class.bg-danger]="!sim[1].limpia">[{{sim[1].rnd_limpia | setNoValue}}] - {{sim[1].limpia | setBooleans}}</td>
-            <td [class.bg-danger]="!sim[1].rompe"  *ngIf="!paga">[{{sim[1].rnd_rompe | setNoValue}}] - {{sim[1].rompe | setBooleans}}</td>
-
-            <td [class.bg-danger]="!sim[2].detenido" class="columnSeparator">[{{sim[2].rnd_detenido}}] - {{sim[2].detenido | setBooleans}}</td>
-            <td [class.bg-danger]="!sim[2].cerca_limpiador">[{{sim[2].rnd_cerca_limpiador | setNoValue}}] - {{sim[2].cerca_limpiador | setBooleans}}</td>
-            <td [class.bg-danger]="!sim[2].limpia">[{{sim[2].rnd_limpia | setNoValue}}] - {{sim[2].limpia | setBooleans}}</td>
-            <td [class.bg-danger]="!sim[2].rompe"  *ngIf="!paga">[{{sim[2].rnd_rompe | setNoValue}}] - {{sim[2].rompe | setBooleans}}</td>
-
-            <td class="columnSeparator">{{sim[0].costo + sim[1].costo + sim[2].costo}}</td>
-
-          </tr>
-
-        </tbody>
-      </table>
-
-
-    </ng-template>
-  </ngb-tab>
-
-  <ngb-tab>
-    <ng-template ngbTabTitle>
-      <b>Ruta 2</b>
-      <fa class="colorBlue" name="star"></fa>
-      <fa class="colorBlue" name="star"></fa>
-    </ng-template>
-    <ng-template ngbTabContent>
-
-        <table class="table table-striped table-sm table-dark" >
             <thead>
               <tr>
                 <th></th>
@@ -138,62 +57,159 @@
                 <th></th>
                 <th></th>
                 <th *ngIf="!paga"></th>
-
+                <th class="columnSeparator">Semáforo 3</th>
+                <th></th>
+                <th></th>
+                <th *ngIf="!paga"></th>
                 <th class="columnSeparator"></th>
               </tr>
               <tr>
-                <th scope="col">#</th>
-    
-                <th scope="col" class="columnSeparator">Rnd/Detenido</th>
-                <th scope="col">Rnd/Cerca</th>
-                <th scope="col">Rnd/Limpia</th>
-                <th scope="col" *ngIf="!paga">Rnd/Daño</th>    
-    
+                <th scope="col">Num</th>
+  
                 <th scope="col" class="columnSeparator">Rnd/Detenido</th>
                 <th scope="col">Rnd/Cerca</th>
                 <th scope="col">Rnd/Limpia</th>
                 <th scope="col" *ngIf="!paga">Rnd/Daño</th>
-    
-                <th scope="col" class="columnSeparator">Costo</th>   
-    
+  
+  
+                <th scope="col" class="columnSeparator">Rnd/Detenido</th>
+                <th scope="col">Rnd/Cerca</th>
+                <th scope="col">Rnd/Limpia</th>
+                <th scope="col" *ngIf="!paga">Rnd/Daño</th>
+  
+  
+                <th scope="col" class="columnSeparator">Rnd/Detenido</th>
+                <th scope="col">Rnd/Cerca</th>
+                <th scope="col">Rnd/Limpia</th>
+                <th scope="col" *ngIf="!paga">Rnd/Daño</th>
+  
+  
+                <th scope="col" class="columnSeparator">Costo</th>
+  
+  
               </tr>
             </thead>
-            <tbody >
-              <tr *ngFor="let sim of simulacionesR2" [class.bg-success]="sim[0].costo > 0 || sim[1].costo > 0">
-                <th scope="row">{{sim[0].num}}</th>
-    
-                <td [class.bg-danger]="!sim[0].detenido" class="columnSeparator">[{{sim[0].rnd_detenido}}] - {{sim[0].detenido | setBooleans}}</td>
-                <td [class.bg-danger]="!sim[0].cerca_limpiador">[{{sim[0].rnd_cerca_limpiador | setNoValue}}] - {{sim[0].cerca_limpiador | setBooleans}}</td>
-                <td [class.bg-danger]="!sim[0].limpia">[{{sim[0].rnd_limpia | setNoValue}}] - {{sim[0].limpia | setBooleans}}</td>
-                <td [class.bg-danger]="!sim[0].rompe"  *ngIf="!paga">[{{sim[0].rnd_rompe | setNoValue}}] - {{sim[0].rompe | setBooleans}}</td>
-    
-                <td [class.bg-danger]="!sim[1].detenido" class="columnSeparator">[{{sim[1].rnd_detenido}}] - {{sim[1].detenido | setBooleans}}</td>
-                <td [class.bg-danger]="!sim[1].cerca_limpiador">[{{sim[1].rnd_cerca_limpiador | setNoValue}}] - {{sim[1].cerca_limpiador | setBooleans}}</td>
-                <td [class.bg-danger]="!sim[1].limpia">[{{sim[1].rnd_limpia | setNoValue}}] - {{sim[1].limpia | setBooleans}}</td>
-                <td [class.bg-danger]="!sim[1].rompe"  *ngIf="!paga">[{{sim[1].rnd_rompe | setNoValue}}] - {{sim[1].rompe | setBooleans}}</td>
-    
-                <td class="columnSeparator">{{sim[0].costo + sim[1].costo}}</td>
-    
+        </table>
+      
+      <div class="htable">
+
+        <table class="table table-striped table-sm table-dark">
+
+          
+          <tbody>
+            <tr *ngFor="let sim of simulacionesR1" [class.bg-success]="sim[0].costo > 0 || sim[1].costo > 0 || sim[2].costo > 0">
+              <th scope="row">{{sim[0].num}}</th>
+
+              <td [class.bg-danger]="!sim[0].detenido" class="columnSeparator">[{{sim[0].rnd_detenido}}] - {{sim[0].detenido | setBooleans}}</td>
+              <td [class.bg-danger]="!sim[0].cerca_limpiador">[{{sim[0].rnd_cerca_limpiador | setNoValue}}] - {{sim[0].cerca_limpiador | setBooleans}}</td>
+              <td [class.bg-danger]="!sim[0].limpia">[{{sim[0].rnd_limpia | setNoValue}}] - {{sim[0].limpia | setBooleans}}</td>
+              <td [class.bg-danger]="!sim[0].rompe" *ngIf="!paga">[{{sim[0].rnd_rompe | setNoValue}}] - {{sim[0].rompe | setBooleans}}</td>
+
+              <td [class.bg-danger]="!sim[1].detenido" class="columnSeparator">[{{sim[1].rnd_detenido}}] - {{sim[1].detenido | setBooleans}}</td>
+              <td [class.bg-danger]="!sim[1].cerca_limpiador">[{{sim[1].rnd_cerca_limpiador | setNoValue}}] - {{sim[1].cerca_limpiador | setBooleans}}</td>
+              <td [class.bg-danger]="!sim[1].limpia">[{{sim[1].rnd_limpia | setNoValue}}] - {{sim[1].limpia | setBooleans}}</td>
+              <td [class.bg-danger]="!sim[1].rompe" *ngIf="!paga">[{{sim[1].rnd_rompe | setNoValue}}] - {{sim[1].rompe | setBooleans}}</td>
+
+              <td [class.bg-danger]="!sim[2].detenido" class="columnSeparator">[{{sim[2].rnd_detenido}}] - {{sim[2].detenido | setBooleans}}</td>
+              <td [class.bg-danger]="!sim[2].cerca_limpiador">[{{sim[2].rnd_cerca_limpiador | setNoValue}}] - {{sim[2].cerca_limpiador | setBooleans}}</td>
+              <td [class.bg-danger]="!sim[2].limpia">[{{sim[2].rnd_limpia | setNoValue}}] - {{sim[2].limpia | setBooleans}}</td>
+              <td [class.bg-danger]="!sim[2].rompe" *ngIf="!paga">[{{sim[2].rnd_rompe | setNoValue}}] - {{sim[2].rompe | setBooleans}}</td>
+
+              <td class="columnSeparator">{{sim[0].costo + sim[1].costo + sim[2].costo}}</td>
+
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+
+    </ng-template>
+  </ngb-tab>
+
+  <ngb-tab>
+    <ng-template ngbTabTitle>
+      <b>Ruta 2</b>
+      <fa class="colorBlue" name="star"></fa>
+      <fa class="colorBlue" name="star"></fa>
+    </ng-template>
+    <ng-template ngbTabContent>
+        <table class="table table-striped table-sm table-dark headerTable2">
+            <thead>
+              <tr>
+                <th></th>
+                <th class="columnSeparator">Semáforo 1</th>
+                <th></th>
+                <th></th>
+                <th *ngIf="!paga"></th>
+                <th class="columnSeparator">Semáforo 2</th>
+                <th></th>
+                <th></th>
+                <th *ngIf="!paga"></th>
+  
+                <th class="columnSeparator"></th>
               </tr>
-    
-            </tbody>
-          </table>
-    
-    
+              <tr>
+                <th scope="col">Num</th>
+  
+                <th scope="col" class="columnSeparator">Rnd/Detenido</th>
+                <th scope="col">Rnd/Cerca</th>
+                <th scope="col">Rnd/Limpia</th>
+                <th scope="col" *ngIf="!paga">Rnd/Daño</th>
+  
+                <th scope="col" class="columnSeparator">Rnd/Detenido</th>
+                <th scope="col">Rnd/Cerca</th>
+                <th scope="col">Rnd/Limpia</th>
+                <th scope="col" *ngIf="!paga">Rnd/Daño</th>
+  
+                <th scope="col" class="columnSeparator">Costo</th>
+  
+              </tr>
+            </thead>
+        </table>
+      <div class="htable">
+          <table class="table table-striped table-sm table-dark">
+
+          <tbody>
+            <tr *ngFor="let sim of simulacionesR2" [class.bg-success]="sim[0].costo > 0 || sim[1].costo > 0">
+              <th scope="row">{{sim[0].num}}</th>
+
+              <td [class.bg-danger]="!sim[0].detenido" class="columnSeparator">[{{sim[0].rnd_detenido}}] - {{sim[0].detenido | setBooleans}}</td>
+              <td [class.bg-danger]="!sim[0].cerca_limpiador">[{{sim[0].rnd_cerca_limpiador | setNoValue}}] - {{sim[0].cerca_limpiador | setBooleans}}</td>
+              <td [class.bg-danger]="!sim[0].limpia">[{{sim[0].rnd_limpia | setNoValue}}] - {{sim[0].limpia | setBooleans}}</td>
+              <td [class.bg-danger]="!sim[0].rompe" *ngIf="!paga">[{{sim[0].rnd_rompe | setNoValue}}] - {{sim[0].rompe | setBooleans}}</td>
+
+              <td [class.bg-danger]="!sim[1].detenido" class="columnSeparator">[{{sim[1].rnd_detenido}}] - {{sim[1].detenido | setBooleans}}</td>
+              <td [class.bg-danger]="!sim[1].cerca_limpiador">[{{sim[1].rnd_cerca_limpiador | setNoValue}}] - {{sim[1].cerca_limpiador | setBooleans}}</td>
+              <td [class.bg-danger]="!sim[1].limpia">[{{sim[1].rnd_limpia | setNoValue}}] - {{sim[1].limpia | setBooleans}}</td>
+              <td [class.bg-danger]="!sim[1].rompe" *ngIf="!paga">[{{sim[1].rnd_rompe | setNoValue}}] - {{sim[1].rompe | setBooleans}}</td>
+
+              <td class="columnSeparator">{{sim[0].costo + sim[1].costo}}</td>
+
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+
 
     </ng-template>
   </ngb-tab>
 </ngb-tabset>
 
 
-<div *ngIf="showTable">
-    <h1>Costo de Ruta 1: {{costo_acumulado}}</h1>
+<div *ngIf="showTable" class="container text-center bkInfoRes">
 
+      <button type="button" class="btn btn-success mb-2" *ngIf="!flagSimuladoCompleto" (click)="repetir()">Simular con cambio de política</button>
+
+
+  <h4>Costo de Ruta 1 pagando: {{costo_acumuladoR1p}}</h4>
+  <h4>Costo de Ruta 2 pagando: {{costo_acumuladoR2p}}</h4>
+  <h4>Costo de Ruta 1 no pagando: {{costo_acumuladoR1np}}</h4>
+  <h4>Costo de Ruta 2 no pagando: {{costo_acumuladoR2np}}</h4>
 </div>
 
 <div *ngIf="!showTable" class="container text-center bkInfo">
-    <h1 class="display-4">Información</h1>
+  <h1 class="display-4">Información</h1>
 </div>
 
 <div class="text-center footer">Agustín Muñoz Campos - Simulación UTN FRC 2018</div>
-

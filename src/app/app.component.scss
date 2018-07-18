@@ -13,8 +13,14 @@
     background-color: rgb(213, 252, 222);
     border-radius: 4px;
     margin-top: 8%;
-    padding: 100px 0;
+    padding: 100px;
+}
 
+.bkInfoRes {
+    height: 40vh;
+    background-color: rgb(213, 252, 222);
+    border-radius: 4px;
+    margin-top: 3px; 
 }
 
 .footer {
@@ -34,7 +40,30 @@
     color: #f36976;
 }
 
-table {
-    margin-top: 5px;
-
+table {    
+    margin-bottom: 1px;
 }
+
+.htable {
+    height: 65vh;
+    overflow-y: scroll;
+}
+
+.headerTable {
+    margin-top: 5px;
+    border-right: 1vw solid;
+}
+
+.headerTable2 {
+    margin-top: 5px;
+    border-right: 1vw solid;
+}
+
+.table {
+    td {
+        text-align: center; 
+    }
+    th {
+        text-align: center; 
+    }
+ }
