@@ -49,12 +49,12 @@ table {
 
 .headerTable {
     margin-top: 5px;
-    border-right: 1vw solid;
+    //border-right: 1vw solid;
 }
 
 .headerTable2 {
     margin-top: 5px;
-    border-right: 1vw solid;
+    //border-right: 1vw solid;
 }
 
 .table {
@@ -63,10 +63,38 @@ table {
     }
     th {
         text-align: center; 
+        padding-left: 0;
+        padding-right: 0;
+        img {
+            height: 25px;
+            width: auto;
+        }
     }
  }
 
  .msg {
      margin: 0 !important;
      color: #f36976;
+ }
+
+ .costor1 {
+     width: 4.6%;
+ }
+ .costor2 {
+     width: 95px;
+ }
+
+ .numr1 {
+     width: 60px;
+ }
+ .numr2 {
+     width: 87px;
+ }
+
+ .numr2p {
+    width: 113px;
+ }
+
+ .numr1p {
+    width: 79px;
  }

@@ -8,7 +8,7 @@ import { ruta1_rojo, ruta2_azul, costo_dano, costo_limpiado } from './rangos-rut
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  cant_simulaciones: number = 50;
+  cant_simulaciones: number = 100;
   paga: Boolean = false;
   showTable: Boolean = false;
 
@@ -30,6 +30,9 @@ export class AppComponent {
 
   costo_rompe = costo_dano;
   costo_limpia = costo_limpiado;
+
+  sim_pagando: boolean = false;
+  sim_nopagando: boolean = false;
 
   msg: string = '';
   cancelar: boolean = false;
@@ -55,6 +58,8 @@ export class AppComponent {
 
   async start() {
     let update = Math.round(this.cant_simulaciones / 10);
+
+    this.costo_acumulado = 0;
 
 
     for (let i = 1; i <= this.cant_simulaciones; i++) {
@@ -100,8 +105,10 @@ export class AppComponent {
     if (ruta == 1) {
       if (this.paga) {
         this.costo_acumuladoR1p = this.costo_acumulado;
+        this.sim_pagando = true;
       } else {
         this.costo_acumuladoR1np = this.costo_acumulado;
+        this.sim_nopagando = true;
       }
       this.costo_acumulado = 0;
     } else {
@@ -189,6 +196,8 @@ export class AppComponent {
     this.showTable = false;
     this.flagSimuladoCompleto = false;
     this.msg = '';
+    this.sim_pagando = false;
+    this.sim_nopagando = false;
   }
 
   cancel() {

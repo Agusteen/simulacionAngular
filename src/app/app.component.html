@@ -23,7 +23,7 @@
     </div>
     <div class="col-auto">
       <button type="submit" class="btn btn-success mb-2" [disabled]="simForm.invalid" *ngIf="!flagSimulado && !loading">Empezar simulación</button>
-      <button type="button" class="btn btn-danger mb-2" *ngIf="flagSimulado" (click)="reset()">Nueva simulación</button>
+      <button type="button" class="btn btn-danger mb-2" *ngIf="flagSimulado && !loading" (click)="reset()">Nueva simulación</button>
       <button type="button" class="btn btn-danger mb-2" *ngIf="loading" (click)="cancel()">Cancelar</button>
     </div>
     <div class="col-auto" [hidden]="!loading">
@@ -50,22 +50,22 @@
         <thead>
           <tr>
             <th></th>
-            <th class="columnSeparator">Semáforo R1</th>
+            <th class="columnSeparator"><img src="../assets/images/semaforo.png">Semáforo R1</th>
             <th></th>
             <th></th>
             <th *ngIf="!paga"></th>
-            <th class="columnSeparator">Semáforo R2</th>
+            <th class="columnSeparator"><img src="../assets/images/semaforo.png">Semáforo R2</th>
             <th></th>
             <th></th>
             <th *ngIf="!paga"></th>
-            <th class="columnSeparator">Semáforo R3</th>
+            <th class="columnSeparator"><img src="../assets/images/semaforo.png">Semáforo R3</th>
             <th></th>
             <th></th>
             <th *ngIf="!paga"></th>
             <th class="columnSeparator"></th>
           </tr>
           <tr>
-            <th scope="col">Num</th>
+            <th scope="col" class="numr1" [class.numr1p]="paga">num</th>
 
             <th scope="col" class="columnSeparator">Rnd/Detenido</th>
             <th scope="col">Rnd/Cerca</th>
@@ -99,7 +99,7 @@
 
           <tbody>
             <tr *ngFor="let sim of simulacionesR1" [class.bg-success]="sim[0].costo > 0 || sim[1].costo > 0 || sim[2].costo > 0">
-              <th scope="row">{{sim[0].num}}</th>
+              <th scope="row">{{sim[0].num | number:'3.0'}}</th>
 
               <td [class.bg-danger]="!sim[0].detenido" class="columnSeparator">[{{sim[0].rnd_detenido}}] - {{sim[0].detenido | setBooleans}}</td>
               <td [class.bg-danger]="!sim[0].cerca_limpiador">[{{sim[0].rnd_cerca_limpiador | setNoValue}}] - {{sim[0].cerca_limpiador | setBooleans}}</td>
@@ -116,7 +116,7 @@
               <td [class.bg-danger]="!sim[2].limpia">[{{sim[2].rnd_limpia | setNoValue}}] - {{sim[2].limpia | setBooleans}}</td>
               <td [class.bg-danger]="!sim[2].rompe" *ngIf="!paga">[{{sim[2].rnd_rompe | setNoValue}}] - {{sim[2].rompe | setBooleans}}</td>
 
-              <td class="columnSeparator">{{sim[0].costo + sim[1].costo + sim[2].costo}}</td>
+              <td class="columnSeparator costor1">{{sim[0].costo + sim[1].costo + sim[2].costo}}</td>
 
             </tr>
 
@@ -138,11 +138,11 @@
         <thead>
           <tr>
             <th></th>
-            <th class="columnSeparator">Semáforo P1</th>
+            <th class="columnSeparator"><img src="../assets/images/semaforo.png">Semáforo P1</th>
             <th></th>
             <th></th>
             <th *ngIf="!paga"></th>
-            <th class="columnSeparator">Semáforo P2</th>
+            <th class="columnSeparator"><img src="../assets/images/semaforo.png">Semáforo P2</th>
             <th></th>
             <th></th>
             <th *ngIf="!paga"></th>
@@ -150,7 +150,7 @@
             <th class="columnSeparator"></th>
           </tr>
           <tr>
-            <th scope="col">Num</th>
+            <th scope="col" class="numr2" [class.numr2p]="paga">num</th>
 
             <th scope="col" class="columnSeparator">Rnd/Detenido</th>
             <th scope="col">Rnd/Cerca</th>
@@ -172,7 +172,7 @@
 
           <tbody>
             <tr *ngFor="let sim of simulacionesR2" [class.bg-success]="sim[0].costo > 0 || sim[1].costo > 0">
-              <th scope="row">{{sim[0].num}}</th>
+              <th scope="row">{{sim[0].num | number:'3.0'}}</th>
 
               <td [class.bg-danger]="!sim[0].detenido" class="columnSeparator">[{{sim[0].rnd_detenido}}] - {{sim[0].detenido | setBooleans}}</td>
               <td [class.bg-danger]="!sim[0].cerca_limpiador">[{{sim[0].rnd_cerca_limpiador | setNoValue}}] - {{sim[0].cerca_limpiador | setBooleans}}</td>
@@ -184,7 +184,7 @@
               <td [class.bg-danger]="!sim[1].limpia">[{{sim[1].rnd_limpia | setNoValue}}] - {{sim[1].limpia | setBooleans}}</td>
               <td [class.bg-danger]="!sim[1].rompe" *ngIf="!paga">[{{sim[1].rnd_rompe | setNoValue}}] - {{sim[1].rompe | setBooleans}}</td>
 
-              <td class="columnSeparator">{{sim[0].costo + sim[1].costo}}</td>
+              <td class="columnSeparator costor2">{{sim[0].costo + sim[1].costo}}</td>
 
             </tr>
 
@@ -209,7 +209,7 @@
 
   </div>
   <div class="row">
-    <div class="col-sm" *ngIf="costo_acumuladoR1p">
+    <div class="col-sm" *ngIf="sim_pagando">
       <hr>
       <h3>Pagando al lmpiavidrios
         <small>${{costo_limpia}}</small>
@@ -231,7 +231,7 @@
         <h6>Promedio: ${{costo_acumuladoR2p / cant_simulaciones | number : '1.2-2'}}</h6>
       </h5>
     </div>
-    <div class="col-sm" *ngIf="costo_acumuladoR1np">
+    <div class="col-sm" *ngIf="sim_nopagando">
       <hr>
       <h3>No pagando
         <small>(${{costo_rompe}} el daño)</small>
