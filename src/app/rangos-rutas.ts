@@ -17,7 +17,7 @@ export const ruta1_rojo = [
         lim_limpia: 70,
         lim_daño: 5
     }
-]
+];
 
 export const ruta2_azul = [
     {
@@ -32,7 +32,8 @@ export const ruta2_azul = [
         lim_limpia: 90,
         lim_daño: 5
     }
-]
+];
 
 export const costo_dano = 500;
+
 export const costo_limpiado = 0.5;

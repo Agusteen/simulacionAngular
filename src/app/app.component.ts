@@ -198,6 +198,7 @@ export class AppComponent {
     this.msg = '';
     this.sim_pagando = false;
     this.sim_nopagando = false;
+    this.paga = false;
   }
 
   cancel() {
