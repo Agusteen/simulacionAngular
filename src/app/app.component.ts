@@ -48,8 +48,8 @@ export class AppComponent {
       this.loading = true;
       this.start();
       this.showTable = true;
-    } else if(this.cant_simulaciones > 5000) {
-      this.msg = 'Para cantidades mayor a 5 mil la performance degrada';
+    } else if(this.cant_simulaciones > 1000) {
+      this.msg = 'Para cantidades mayor a mil la performance degrada';
     } else {
       this.msg = 'Debe ser un numero mayor a 0';
     }
